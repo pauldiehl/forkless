@@ -56,8 +56,11 @@ app.post('/api/chat', async (req, res) => {
       content: m.text
     }));
 
-    const response = await chat(anthropicMessages);
-    res.json({ response });
+    const result = await chat(anthropicMessages);
+    res.json({
+      response: result.text,
+      actions: result.actions || []
+    });
   } catch (err) {
     console.error('Chat error:', err.message);
     res.status(500).json({ error: 'Agent error', detail: err.message });

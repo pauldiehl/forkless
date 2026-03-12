@@ -816,6 +816,15 @@
 
         const data = await res.json();
         addMessage('agent', data.response);
+
+        // Handle actions (e.g. load capability in Transaction Layer)
+        if (data.actions && data.actions.length > 0) {
+          for (const action of data.actions) {
+            if (action.action === 'load_transaction_layer' && action.capability) {
+              loadCapabilityInTransactionLayer(action.capability);
+            }
+          }
+        }
       } catch (err) {
         hideTyping();
         console.warn('LLM call failed, using canned response:', err.message);
@@ -823,6 +832,30 @@
         const response = cannedResponses[responseIndex % cannedResponses.length];
         responseIndex++;
         addMessage('agent', response);
+      }
+    }
+
+    // ========================================
+    // TRANSACTION LAYER LOADING
+    // ========================================
+    function loadCapabilityInTransactionLayer(cap) {
+      const iframe = document.getElementById('tl-iframe');
+      if (cap.type === 'script') {
+        // Load ExecuteCommand component with this capability's config
+        const config = {
+          command: cap.usage.command,
+          args: cap.usage.args || []
+        };
+        const encoded = encodeURIComponent(JSON.stringify(config));
+        iframe.src = `/capabilities/execute-command.html?config=${encoded}`;
+      } else if (cap.type === 'component') {
+        // Load the component directly
+        iframe.src = `/${cap.path}`;
+      }
+
+      // If in collapsed mode, switch to minimal so user sees it
+      if (currentMode === 'collapsed') {
+        setMode('minimal');
       }
     }
 

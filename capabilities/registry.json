@@ -16,14 +16,18 @@
     "id": "hello-world",
     "name": "Hello World",
     "description": "Greeting script that takes a name and logs hello in 3 languages",
-    "useCase": "Demo/test script for validating the ExecuteCommand component",
+    "useCase": "Greeting script that takes a name and logs hello in 3 languages",
     "type": "script",
     "inline": false,
     "path": "capabilities/scripts/hello-world.js",
     "usage": {
       "command": "node capabilities/scripts/hello-world.js",
       "args": [
-        { "name": "--name", "placeholder": "Your name", "required": true }
+        {
+          "name": "--name",
+          "placeholder": "Your name",
+          "required": false
+        }
       ]
     }
   }
