@@ -791,25 +791,39 @@
       if (el) el.remove();
     }
 
-    function sendMessage() {
+    async function sendMessage() {
       const input = document.getElementById('user-input');
       const text = input.value.trim();
       if (!text) return;
 
       addMessage('user', text);
-
-      // Reset input to default state
       resetInput();
-
       showTyping();
 
-      const delay = 800 + Math.random() * 1200;
-      setTimeout(() => {
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages })
+        });
+
         hideTyping();
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || 'Agent unavailable');
+        }
+
+        const data = await res.json();
+        addMessage('agent', data.response);
+      } catch (err) {
+        hideTyping();
+        console.warn('LLM call failed, using canned response:', err.message);
+        // Fallback to canned responses when no API key configured
         const response = cannedResponses[responseIndex % cannedResponses.length];
         responseIndex++;
         addMessage('agent', response);
-      }, delay);
+      }
     }
 
     // ========================================
