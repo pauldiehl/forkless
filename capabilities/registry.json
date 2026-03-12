@@ -3,31 +3,41 @@
     "id": "execute-command",
     "name": "ExecuteCommand",
     "description": "Terminal-style UX component for running scripts with arguments and tailing log output",
-    "useCase": "Test and run any registered script/capability with configurable args, live log output, process control (execute/kill)",
+    "useCase": "Test and run any registered script/capability with configurable args, live log output, process control",
     "type": "component",
     "inline": false,
     "path": "capabilities/execute-command.html",
     "usage": {
-      "command": "The script command to pre-populate (e.g. 'node scripts/hello-world.js')",
-      "args": "Array of {name, value, placeholder} objects to pre-populate arg fields"
+      "note": "This is a UI component, not a script. Load it in the Transaction Layer and pass a config with command + args."
     }
   },
   {
     "id": "hello-world",
     "name": "Hello World",
     "description": "Greeting script that takes a name and logs hello in 3 languages",
-    "useCase": "Greeting script that takes a name and logs hello in 3 languages",
+    "useCase": "Demo/test script for validating the ExecuteCommand component",
     "type": "script",
     "inline": false,
     "path": "capabilities/scripts/hello-world.js",
     "usage": {
       "command": "node capabilities/scripts/hello-world.js",
       "args": [
-        {
-          "name": "--name",
-          "placeholder": "Your name",
-          "required": false
-        }
+        { "name": "--name", "placeholder": "Your name", "required": true }
+      ]
+    }
+  },
+  {
+    "id": "disk-usage-monitor",
+    "name": "Disk Usage Monitor",
+    "description": "Checks disk usage and warns if any mount is over 80%",
+    "useCase": "System health check for disk space monitoring",
+    "type": "script",
+    "inline": false,
+    "path": "capabilities/scripts/disk-usage-monitor.js",
+    "usage": {
+      "command": "node capabilities/scripts/disk-usage-monitor.js",
+      "args": [
+        { "name": "--threshold", "placeholder": "Warning threshold % (default: 80)", "required": false }
       ]
     }
   }
