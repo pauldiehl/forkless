@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExecuteCommand</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      background: #1a1a1a;
+      color: #e0e0e0;
+      padding: 20px;
+      line-height: 1.4;
+    }
+
+    .execute-command {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #2d2d2d;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .section { margin-bottom: 24px; }
+
+    .section-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #4a9eff;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Args */
+    .args-container {
+      background: #363636;
+      padding: 16px;
+      border-radius: 6px;
+      border-left: 3px solid #4a9eff;
+    }
+
+    .args-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+
+    .btn-add { background: #28a745; color: white; }
+    .btn-add:hover { background: #218838; }
+    .btn-remove { background: #dc3545; color: white; }
+    .btn-remove:hover { background: #c82333; }
+
+    .arg-item {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .arg-label {
+      min-width: 80px;
+      font-size: 12px;
+      color: #4a9eff;
+    }
+
+    .arg-input {
+      flex: 1;
+      padding: 8px;
+      background: #4a4a4a;
+      border: 1px solid #666;
+      border-radius: 4px;
+      color: #e0e0e0;
+      font-family: inherit;
+    }
+
+    .arg-input:focus { outline: none; border-color: #4a9eff; }
+
+    /* Command */
+    .command-container {
+      background: #363636;
+      padding: 16px;
+      border-radius: 6px;
+      border-left: 3px solid #ffa500;
+    }
+
+    .command-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .command-input {
+      flex: 1;
+      padding: 10px;
+      background: #4a4a4a;
+      border: 1px solid #666;
+      border-radius: 4px;
+      color: #e0e0e0;
+      font-family: inherit;
+      font-size: 14px;
+    }
+
+    .command-input:focus { outline: none; border-color: #ffa500; }
+
+    .btn-execute {
+      background: #28a745;
+      color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+    }
+
+    .btn-execute:hover:not(:disabled) { background: #218838; }
+    .btn-execute:disabled { background: #666; cursor: not-allowed; }
+
+    .btn-kill {
+      background: #dc3545;
+      color: white;
+      padding: 10px 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .btn-kill:hover { background: #c82333; }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #666;
+    }
+
+    .status-dot.idle { background: #666; }
+    .status-dot.running { background: #28a745; animation: pulse 1.5s infinite; }
+    .status-dot.completed { background: #4a9eff; }
+    .status-dot.error { background: #dc3545; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .exit-code {
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    .exit-code.success { background: #28a745; color: white; }
+    .exit-code.error { background: #dc3545; color: white; }
+
+    /* Logs */
+    .logs-container {
+      background: #1e1e1e;
+      border-radius: 6px;
+      border-left: 3px solid #ff6b6b;
+    }
+
+    .logs-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: #2a2a2a;
+      border-radius: 6px 6px 0 0;
+      border-bottom: 1px solid #444;
+    }
+
+    .logs-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .btn-clear {
+      background: #6c757d;
+      color: white;
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    .btn-clear:hover { background: #545b62; }
+
+    .auto-scroll-toggle {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    .logs-output {
+      height: 300px;
+      overflow-y: auto;
+      padding: 16px;
+      font-size: 13px;
+      line-height: 1.3;
+      background: #1a1a1a;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .log-line { margin-bottom: 2px; word-break: break-all; }
+    .log-line.error { color: #ff6b6b; }
+    .log-line.success { color: #51cf66; }
+    .log-line.info { color: #74c0fc; }
+    .log-timestamp { color: #888; font-size: 11px; margin-right: 6px; }
+  </style>
+</head>
+<body>
+  <div class="execute-command">
+    <!-- Args -->
+    <div class="section">
+      <div class="section-title">Arguments</div>
+      <div class="args-container">
+        <div class="args-controls">
+          <button class="btn btn-add" onclick="addArg()">+ Add Arg</button>
+          <button class="btn btn-remove" onclick="removeLastArg()">− Remove Arg</button>
+        </div>
+        <div id="args-list"></div>
+      </div>
+    </div>
+
+    <!-- Command -->
+    <div class="section">
+      <div class="section-title">Command</div>
+      <div class="command-container">
+        <div class="command-row">
+          <input type="text" class="command-input" id="command-input" placeholder="e.g. node scripts/hello-world.js" readonly>
+          <button class="btn btn-execute" id="execute-btn" onclick="executeCommand()">Execute</button>
+          <button class="btn btn-kill" id="kill-btn" onclick="killProcess()">Kill Process</button>
+        </div>
+        <div class="status-indicator">
+          <span class="status-dot idle" id="status-dot"></span>
+          <span id="status-text">Idle</span>
+          <span id="exit-code-display"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logs -->
+    <div class="section">
+      <div class="section-title">Logs</div>
+      <div class="logs-container">
+        <div class="logs-header">
+          <span>Output</span>
+          <div class="logs-controls">
+            <button class="btn btn-clear" onclick="clearLogs()">Clear</button>
+            <label class="auto-scroll-toggle">
+              <input type="checkbox" id="auto-scroll" checked> Auto-scroll
+            </label>
+          </div>
+        </div>
+        <div class="logs-output" id="logs-output">
+          <div class="log-line info"><span class="log-timestamp">[ready]</span> Waiting for command...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let autoScroll = true;
+    let currentEventSource = null;
+
+    document.getElementById('auto-scroll').addEventListener('change', e => {
+      autoScroll = e.target.checked;
+    });
+
+    // ========================================
+    // POPULATE FROM CONFIG (called by parent or URL params)
+    // ========================================
+    function populate(config) {
+      // config: { command, args: [{ name, value, placeholder }] }
+      if (config.command) {
+        document.getElementById('command-input').value = config.command;
+      }
+      if (config.args) {
+        document.getElementById('args-list').innerHTML = '';
+        config.args.forEach(a => addArg(a.name, a.value || '', a.placeholder || ''));
+      }
+    }
+
+    // Check URL params for config
+    (function init() {
+      const params = new URLSearchParams(window.location.search);
+      const configParam = params.get('config');
+      if (configParam) {
+        try {
+          populate(JSON.parse(decodeURIComponent(configParam)));
+        } catch (e) {
+          console.warn('Invalid config param', e);
+        }
+      }
+    })();
+
+    // Listen for postMessage from parent (Transaction Layer)
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'populate') {
+        populate(e.data.config);
+      }
+    });
+
+    // ========================================
+    // ARGS
+    // ========================================
+    function addArg(name, value, placeholder) {
+      const list = document.getElementById('args-list');
+      const item = document.createElement('div');
+      item.className = 'arg-item';
+      item.innerHTML = `
+        <span class="arg-label">${name || 'arg'}</span>
+        <input type="text" class="arg-input" placeholder="${placeholder || 'value'}" value="${value || ''}">
+        <button class="btn btn-remove" onclick="this.parentElement.remove()" style="padding:4px 8px">×</button>
+      `;
+      list.appendChild(item);
+    }
+
+    function removeLastArg() {
+      const list = document.getElementById('args-list');
+      if (list.lastElementChild) list.lastElementChild.remove();
+    }
+
+    function getArgs() {
+      return Array.from(document.querySelectorAll('.arg-item')).map(item => {
+        const label = item.querySelector('.arg-label').textContent;
+        const value = item.querySelector('.arg-input').value.trim();
+        return value ? `${label} ${value}` : '';
+      }).filter(Boolean);
+    }
+
+    // ========================================
+    // STATUS
+    // ========================================
+    function setStatus(status, text) {
+      const dot = document.getElementById('status-dot');
+      dot.className = `status-dot ${status}`;
+      document.getElementById('status-text').textContent = text;
+    }
+
+    function showExitCode(code) {
+      const cls = code === 0 ? 'success' : 'error';
+      document.getElementById('exit-code-display').innerHTML =
+        `<span class="exit-code ${cls}">Exit: ${code}</span>`;
+    }
+
+    // ========================================
+    // LOGGING
+    // ========================================
+    function addLog(message, type = 'info') {
+      const out = document.getElementById('logs-output');
+      const ts = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.className = `log-line ${type}`;
+      line.innerHTML = `<span class="log-timestamp">[${ts}]</span> ${message}`;
+      out.appendChild(line);
+      if (autoScroll) out.scrollTop = out.scrollHeight;
+    }
+
+    function clearLogs() {
+      document.getElementById('logs-output').innerHTML =
+        '<div class="log-line info"><span class="log-timestamp">[ready]</span> Logs cleared.</div>';
+    }
+
+    // ========================================
+    // EXECUTION (calls server API)
+    // ========================================
+    async function executeCommand() {
+      const command = document.getElementById('command-input').value.trim();
+      if (!command) return addLog('No command specified', 'error');
+
+      const args = getArgs();
+      const fullCommand = args.length ? `${command} ${args.join(' ')}` : command;
+
+      document.getElementById('execute-btn').style.display = 'none';
+      document.getElementById('kill-btn').style.display = 'inline-block';
+      document.getElementById('exit-code-display').innerHTML = '';
+      setStatus('running', 'Running...');
+      addLog(`$ ${fullCommand}`, 'info');
+
+      try {
+        const res = await fetch('/api/exec', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ command: fullCommand })
+        });
+
+        if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('\n');
+          buffer = lines.pop(); // keep incomplete line in buffer
+
+          for (const line of lines) {
+            if (!line.trim()) continue;
+            try {
+              const event = JSON.parse(line);
+              if (event.type === 'stdout') addLog(event.data, 'info');
+              else if (event.type === 'stderr') addLog(event.data, 'error');
+              else if (event.type === 'exit') {
+                showExitCode(event.code);
+                setStatus(event.code === 0 ? 'completed' : 'error',
+                          event.code === 0 ? 'Completed' : `Failed (${event.code})`);
+              }
+            } catch (e) {
+              addLog(line, 'info');
+            }
+          }
+        }
+      } catch (err) {
+        addLog(`Error: ${err.message}`, 'error');
+        setStatus('error', 'Error');
+      }
+
+      document.getElementById('execute-btn').style.display = 'inline-block';
+      document.getElementById('kill-btn').style.display = 'none';
+      currentEventSource = null;
+    }
+
+    async function killProcess() {
+      try {
+        await fetch('/api/exec/kill', { method: 'POST' });
+        addLog('Process killed by user', 'error');
+        setStatus('error', 'Killed');
+        showExitCode(130);
+      } catch (e) {
+        addLog('Failed to kill process', 'error');
+      }
+      document.getElementById('execute-btn').style.display = 'inline-block';
+      document.getElementById('kill-btn').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "execute-command",
+    "name": "ExecuteCommand",
+    "description": "Terminal-style UX component for running scripts with arguments and tailing log output",
+    "useCase": "Test and run any registered script/capability with configurable args, live log output, process control (execute/kill)",
+    "type": "component",
+    "inline": false,
+    "path": "capabilities/execute-command.html",
+    "usage": {
+      "command": "The script command to pre-populate (e.g. 'node scripts/hello-world.js')",
+      "args": "Array of {name, value, placeholder} objects to pre-populate arg fields"
+    }
+  },
+  {
+    "id": "hello-world",
+    "name": "Hello World",
+    "description": "Greeting script that takes a name and logs hello in 3 languages",
+    "useCase": "Demo/test script for validating the ExecuteCommand component",
+    "type": "script",
+    "inline": false,
+    "path": "capabilities/scripts/hello-world.js",
+    "usage": {
+      "command": "node capabilities/scripts/hello-world.js",
+      "args": [
+        { "name": "--name", "placeholder": "Your name", "required": true }
+      ]
+    }
+  }
+]
