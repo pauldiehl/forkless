@@ -1,0 +1,70 @@
+{
+  "colors": {
+    "bgPrimary": "#0a0e17",
+    "bgSecondary": "#111827",
+    "bgTertiary": "#1a2236",
+    "surface": "#1e293b",
+    "surfaceHover": "#253349",
+    "border": "#2d3a4f",
+    "textPrimary": "#e2e8f0",
+    "textSecondary": "#94a3b8",
+    "textMuted": "#64748b",
+    "accent": "#22d3ee",
+    "accentDim": "rgba(34, 211, 238, 0.15)",
+    "accentGlow": "rgba(34, 211, 238, 0.3)",
+    "agentBg": "#0f1629",
+    "userMsg": "#1e3a5f",
+    "agentMsg": "#1a2236",
+    "success": "#34d399",
+    "gradientFrom": "#22d3ee",
+    "gradientTo": "#0ea5e9"
+  },
+  "brand": {
+    "name": "Man vs Health",
+    "tagline": "Your personal health agent",
+    "agentName": "Man vs Health",
+    "agentStatus": "Online"
+  },
+  "agent": {
+    "greeting": "Hey. I'm your Man vs Health agent. I'm here to help you navigate your health journey — nutrition, allergies, wellness, whatever you're dealing with. What's on your mind?",
+    "cannedResponses": [
+      "That's a great question. Nutrition is the foundational pillar of health — most issues people struggle with have a nutritional component. Tell me more about what you're dealing with.",
+      "I hear you. A lot of people deal with that. Have you considered looking at this from a dietary angle first? Sometimes the simplest interventions make the biggest difference.",
+      "Interesting. Let me think about that... The approach I'd recommend starts with understanding your current baseline. What does a typical day of eating look like for you?",
+      "That's something I can help with. At Man vs Health, we believe in at-home, low-intervention solutions first. Let's figure out what's realistic for your lifestyle.",
+      "Good point. I want to make sure I understand your situation fully before making any recommendations. Can you tell me a bit more about your goals?",
+      "I appreciate you sharing that. Health journeys are personal, and what works for one person doesn't always work for another. Let's find what works for YOU.",
+      "That's actually more common than you'd think. The key is consistency over perfection. Small, sustainable changes beat dramatic overhauls every time.",
+      "I have some thoughts on that. But first — have you had this conversation with your doctor? I can help you prepare the right questions to ask them."
+    ]
+  },
+  "welcome": {
+    "title": "Welcome to Man vs Health",
+    "description": "Your personal health agent. Ask me about nutrition, allergies, wellness plans, or just tell me what's on your mind."
+  },
+  "transactionLayer": {
+    "title": "Man vs Health",
+    "subtitle": "Transaction Layer",
+    "emptyState": {
+      "title": "Your health artifacts will appear here",
+      "description": "As you talk with the agent, your personalized health plans, nutrition guides, progress reports, and other artifacts will materialize in this space."
+    },
+    "features": [
+      {
+        "icon": "health",
+        "title": "Health Plans",
+        "description": "Personalized plans based on your conversation"
+      },
+      {
+        "icon": "nutrition",
+        "title": "Nutrition Guides",
+        "description": "Opinionated guidance rooted in real science"
+      },
+      {
+        "icon": "progress",
+        "title": "Progress",
+        "description": "Track your journey with portable records"
+      }
+    ]
+  }
+}

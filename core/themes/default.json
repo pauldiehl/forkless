@@ -1,0 +1,70 @@
+{
+  "colors": {
+    "bgPrimary": "#101014",
+    "bgSecondary": "#18181b",
+    "bgTertiary": "#27272a",
+    "surface": "#2a2a2e",
+    "surfaceHover": "#3a3a3f",
+    "border": "#3f3f46",
+    "textPrimary": "#fafafa",
+    "textSecondary": "#a1a1aa",
+    "textMuted": "#71717a",
+    "accent": "#6366f1",
+    "accentDim": "rgba(99, 102, 241, 0.15)",
+    "accentGlow": "rgba(99, 102, 241, 0.3)",
+    "agentBg": "#131316",
+    "userMsg": "#2e2b5e",
+    "agentMsg": "#27272a",
+    "success": "#34d399",
+    "gradientFrom": "#6366f1",
+    "gradientTo": "#8b5cf6"
+  },
+  "brand": {
+    "name": "Forkless",
+    "tagline": "Your sovereign platform",
+    "agentName": "Agent",
+    "agentStatus": "Online"
+  },
+  "agent": {
+    "greeting": "Hey. I'm your Forkless agent. I'm here to help you get things done — ask me anything, tell me what you need, or just explore what's possible.",
+    "cannedResponses": [
+      "Good question. Let me think about the best approach for that. Can you tell me a bit more about what you're trying to accomplish?",
+      "I can definitely help with that. Let's start by understanding what you already have in place.",
+      "Interesting. The approach I'd recommend depends on a few things — what does your current setup look like?",
+      "That's something I can work with. Let's break it down into manageable steps and tackle them one at a time.",
+      "Got it. Before I make any recommendations, I want to make sure I understand the full picture. What's the priority here?",
+      "Makes sense. Let me pull together some options for you. Any constraints I should know about?",
+      "That's a solid starting point. The key is getting the foundations right before layering on complexity.",
+      "I hear you. Let me think about that and come back with a concrete recommendation."
+    ]
+  },
+  "welcome": {
+    "title": "Welcome to Forkless",
+    "description": "Your sovereign development platform. Start a conversation to explore what's possible."
+  },
+  "transactionLayer": {
+    "title": "Forkless",
+    "subtitle": "Transaction Layer",
+    "emptyState": {
+      "title": "Your artifacts will appear here",
+      "description": "As you work with the agent, your documents, reports, plans, and other artifacts will materialize in this space."
+    },
+    "features": [
+      {
+        "icon": "document",
+        "title": "Documents",
+        "description": "Generated reports, plans, and records"
+      },
+      {
+        "icon": "data",
+        "title": "Data Views",
+        "description": "Interactive dashboards and visualizations"
+      },
+      {
+        "icon": "export",
+        "title": "Exports",
+        "description": "Portable files you can download and share"
+      }
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "forkless",
+  "version": "1.0.0",
+  "description": "**\"There is no fork.\"**",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "lib": "lib"
+  },
+  "scripts": {
+    "start": "node core/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pauldiehl/forkless.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pauldiehl/forkless/issues"
+  },
+  "homepage": "https://github.com/pauldiehl/forkless#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "better-sqlite3": "^12.6.2",
+    "express": "^4.22.1"
+  }
+}

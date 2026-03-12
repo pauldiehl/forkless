@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transaction Layer</title>
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #101014;
+      --bg-secondary: #18181b;
+      --surface: #2a2a2e;
+      --border: #3f3f46;
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #6366f1;
+      --accent-dim: rgba(99, 102, 241, 0.1);
+      --gradient-from: #6366f1;
+      --gradient-to: #8b5cf6;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .tl-header {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tl-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .tl-logo-mark {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .tl-logo-mark svg {
+      width: 20px;
+      height: 20px;
+      color: white;
+    }
+
+    .tl-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .tl-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .tl-landing {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .tl-hero-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      background: var(--accent-dim);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .tl-hero-icon svg {
+      width: 36px;
+      height: 36px;
+      color: var(--accent);
+    }
+
+    .tl-landing h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .tl-landing p {
+      font-size: 15px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .tl-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 40px;
+      max-width: 640px;
+      width: 100%;
+    }
+
+    .tl-feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .tl-feature-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: var(--accent-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .tl-feature-icon svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent);
+    }
+
+    .tl-feature h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .tl-feature p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .tl-cta {
+      margin-top: 32px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .tl-cta span {
+      color: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      .tl-features {
+        grid-template-columns: 1fr;
+      }
+
+      .tl-landing h1 {
+        font-size: 20px;
+      }
+
+      .tl-header {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tl-header">
+    <div class="tl-logo">
+      <div class="tl-logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+      </div>
+      <div>
+        <div class="tl-title" id="tl-title">Forkless</div>
+        <div class="tl-subtitle" id="tl-subtitle">Transaction Layer</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-landing">
+    <div class="tl-hero-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/>
+        <line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+        <polyline points="10 9 9 9 8 9"/>
+      </svg>
+    </div>
+
+    <h1 id="empty-title">Your artifacts will appear here</h1>
+    <p id="empty-desc">As you work with the agent, your documents, reports, plans, and other artifacts will materialize in this space.</p>
+
+    <div class="tl-features" id="features-grid">
+      <!-- Populated by theme -->
+    </div>
+
+    <div class="tl-cta">
+      <span>Start a conversation</span> with the agent to generate your first artifact
+    </div>
+  </div>
+
+  <script>
+    // SVG icon library for feature cards
+    const featureIcons = {
+      document: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+      data: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+      export: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+      health: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>',
+      nutrition: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
+      progress: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>'
+    };
+
+    function getThemeName() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('theme') || 'default';
+    }
+
+    async function loadTheme() {
+      const name = getThemeName();
+      let config;
+      try {
+        const res = await fetch(`/themes/${name}.json`);
+        if (!res.ok) throw new Error();
+        config = await res.json();
+      } catch {
+        const res = await fetch('/themes/default.json');
+        config = await res.json();
+      }
+      applyTheme(config);
+    }
+
+    function applyTheme(config) {
+      const root = document.documentElement;
+      const c = config.colors;
+
+      root.style.setProperty('--bg-primary', c.bgPrimary);
+      root.style.setProperty('--bg-secondary', c.bgSecondary);
+      root.style.setProperty('--surface', c.surface);
+      root.style.setProperty('--border', c.border);
+      root.style.setProperty('--text-primary', c.textPrimary);
+      root.style.setProperty('--text-secondary', c.textSecondary);
+      root.style.setProperty('--text-muted', c.textMuted);
+      root.style.setProperty('--accent', c.accent);
+      root.style.setProperty('--accent-dim', c.accentDim);
+      root.style.setProperty('--gradient-from', c.gradientFrom);
+      root.style.setProperty('--gradient-to', c.gradientTo);
+
+      // Content
+      const tl = config.transactionLayer;
+      document.getElementById('tl-title').textContent = tl.title;
+      document.getElementById('tl-subtitle').textContent = tl.subtitle;
+      document.getElementById('empty-title').textContent = tl.emptyState.title;
+      document.getElementById('empty-desc').textContent = tl.emptyState.description;
+
+      // Feature cards
+      const grid = document.getElementById('features-grid');
+      grid.innerHTML = '';
+      for (const f of tl.features) {
+        const card = document.createElement('div');
+        card.className = 'tl-feature';
+        card.innerHTML = `
+          <div class="tl-feature-icon">${featureIcons[f.icon] || featureIcons.document}</div>
+          <h3>${f.title}</h3>
+          <p>${f.description}</p>
+        `;
+        grid.appendChild(card);
+      }
+    }
+
+    loadTheme();
+  </script>
+</body>
+</html>
