@@ -7,6 +7,14 @@
     "path": "capabilities/execute-command.html"
   },
   {
+    "id": "markdown",
+    "name": "Markdown Viewer",
+    "type": "viewer",
+    "description": "Renders markdown documents with styled output and source toggle",
+    "path": "capabilities/viewers/markdown-viewer.html",
+    "accepts": "markdown"
+  },
+  {
     "id": "email-viewer",
     "name": "Email Viewer",
     "type": "viewer",

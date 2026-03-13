@@ -3,14 +3,25 @@
     "id": "mean-clean-lean-promo",
     "type": "email-template",
     "path": "artifacts/emails/mean-clean-lean-promo.html",
-    "created": "2026-03-13T01:31:53.606Z",
+    "created": "2026-03-13T01:36:22.666Z",
     "metadata": {
-      "subject": "Transform Your Health with Mean Clean Lean",
-      "prompt": "Create a compelling email template promoting the Mean Clean Lean ebook from Man vs Health. The email should emphasize nutrition as the foundation of health, our philosophy of addressing root causes rather than symptoms, and the practical value of the ebook. Include the URL manvshealth.com/mean-clean-lean-ebook.html as the main CTA. The tone should be direct, warm but not soft, and reflect our belief that most people are over-medicalized and under-educated about their bodies. Highlight that this is about sustainable lifestyle changes, not quick fixes. Make it feel like advice from a knowledgeable friend who cares about results.",
+      "subject": "The Fat Loss Secret They Don't Want You to Know",
+      "prompt": "Create a compelling promotional email for the \"Mean Clean Lean\" ebook from Man vs Health. The email should be direct, no-nonsense, and align with the Man vs Health philosophy of nutrition-first approaches. Emphasize that this isn't another fad diet but a sustainable approach to fat loss through proper nutrition. Include elements about cutting through the BS of the diet industry, focusing on whole foods over processed junk, and getting lean without being miserable. Make it feel personal and conversational, like advice from a knowledgeable friend who's tired of seeing people get scammed by the diet industry. Include calls-to-action to download the ebook and mention it's backed by real nutrition science, not marketing hype.",
       "templateVars": [
         "{{first_name}}",
-        "{{unsubscribe_url}}"
+        "{{ebook_download_url}}",
+        "{{unsubscribe_url}}",
+        "{{website_url}}"
       ]
+    }
+  },
+  {
+    "id": "capabilities-breakdown-031226",
+    "type": "markdown",
+    "path": "artifacts/docs/capabilities-breakdown-031226.md",
+    "created": "2026-03-13T01:48:36.418Z",
+    "metadata": {
+      "title": "Man vs Health Platform Capabilities Breakdown"
     }
   }
 ]

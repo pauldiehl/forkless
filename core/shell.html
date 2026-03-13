@@ -838,28 +838,29 @@
     // ========================================
     // TRANSACTION LAYER LOADING
     // ========================================
+    // Viewer path lookup
+    const viewerPaths = {
+      'execute-command': '/capabilities/execute-command.html',
+      'email-viewer': '/capabilities/viewers/email-viewer.html',
+      'markdown': '/capabilities/viewers/markdown-viewer.html'
+    };
+
     function handleViewerAction(action) {
       const iframe = document.getElementById('tl-iframe');
 
       if (action.viewer === 'execute-command' && action.capability) {
-        // Load runner in ExecuteCommand
         const config = {
           command: action.capability.usage?.command || '',
           args: action.capability.usage?.args || []
         };
-        iframe.src = `/capabilities/execute-command.html?config=${encodeURIComponent(JSON.stringify(config))}`;
-      } else if (action.viewer === 'email-viewer' && action.artifactId) {
-        // Load email in email viewer
-        iframe.src = `/capabilities/viewers/email-viewer.html?id=${action.artifactId}`;
+        iframe.src = `${viewerPaths['execute-command']}?config=${encodeURIComponent(JSON.stringify(config))}`;
       } else if (action.viewer && action.artifactId) {
-        // Generic viewer with artifact ID
-        iframe.src = `/capabilities/viewers/${action.viewer}.html?id=${action.artifactId}`;
+        const basePath = viewerPaths[action.viewer] || `/capabilities/viewers/${action.viewer}.html`;
+        iframe.src = `${basePath}?id=${action.artifactId}`;
       } else if (action.capability?.path) {
-        // Direct load
         iframe.src = `/${action.capability.path}`;
       }
 
-      // Ensure agent layer is visible
       if (currentMode === 'collapsed') {
         setMode('minimal');
       }
@@ -889,8 +890,16 @@
     // INIT
     // ========================================
     (async function init() {
-      // Load theme first
       await loadTheme();
+
+      const params = new URLSearchParams(window.location.search);
+      const viewer = params.get('viewer');
+      const artifact = params.get('artifact');
+
+      // Deep-link: load viewer with artifact
+      if (viewer && artifact) {
+        handleViewerAction({ action: 'load_viewer', viewer, artifactId: artifact });
+      }
 
       // Restore saved mode
       const savedMode = localStorage.getItem('forkless-agent-mode');
@@ -900,7 +909,6 @@
         setMode('minimal');
       }
 
-      // Agent greeting from theme
       setTimeout(() => {
         if (themeConfig && themeConfig.agent.greeting) {
           addMessage('agent', themeConfig.agent.greeting);
