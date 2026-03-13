@@ -817,11 +817,11 @@
         const data = await res.json();
         addMessage('agent', data.response);
 
-        // Handle actions (e.g. load capability in Transaction Layer)
+        // Handle viewer actions from agent
         if (data.actions && data.actions.length > 0) {
           for (const action of data.actions) {
-            if (action.action === 'load_transaction_layer' && action.capability) {
-              loadCapabilityInTransactionLayer(action.capability);
+            if (action.action === 'load_viewer') {
+              handleViewerAction(action);
             }
           }
         }
@@ -838,22 +838,28 @@
     // ========================================
     // TRANSACTION LAYER LOADING
     // ========================================
-    function loadCapabilityInTransactionLayer(cap) {
+    function handleViewerAction(action) {
       const iframe = document.getElementById('tl-iframe');
-      if (cap.type === 'script') {
-        // Load ExecuteCommand component with this capability's config
+
+      if (action.viewer === 'execute-command' && action.capability) {
+        // Load runner in ExecuteCommand
         const config = {
-          command: cap.usage.command,
-          args: cap.usage.args || []
+          command: action.capability.usage?.command || '',
+          args: action.capability.usage?.args || []
         };
-        const encoded = encodeURIComponent(JSON.stringify(config));
-        iframe.src = `/capabilities/execute-command.html?config=${encoded}`;
-      } else if (cap.type === 'component') {
-        // Load the component directly
-        iframe.src = `/${cap.path}`;
+        iframe.src = `/capabilities/execute-command.html?config=${encodeURIComponent(JSON.stringify(config))}`;
+      } else if (action.viewer === 'email-viewer' && action.artifactId) {
+        // Load email in email viewer
+        iframe.src = `/capabilities/viewers/email-viewer.html?id=${action.artifactId}`;
+      } else if (action.viewer && action.artifactId) {
+        // Generic viewer with artifact ID
+        iframe.src = `/capabilities/viewers/${action.viewer}.html?id=${action.artifactId}`;
+      } else if (action.capability?.path) {
+        // Direct load
+        iframe.src = `/${action.capability.path}`;
       }
 
-      // If in collapsed mode, switch to minimal so user sees it
+      // Ensure agent layer is visible
       if (currentMode === 'collapsed') {
         setMode('minimal');
       }

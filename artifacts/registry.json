@@ -1,0 +1,16 @@
+[
+  {
+    "id": "mean-clean-lean-promo",
+    "type": "email-template",
+    "path": "artifacts/emails/mean-clean-lean-promo.html",
+    "created": "2026-03-13T01:31:53.606Z",
+    "metadata": {
+      "subject": "Transform Your Health with Mean Clean Lean",
+      "prompt": "Create a compelling email template promoting the Mean Clean Lean ebook from Man vs Health. The email should emphasize nutrition as the foundation of health, our philosophy of addressing root causes rather than symptoms, and the practical value of the ebook. Include the URL manvshealth.com/mean-clean-lean-ebook.html as the main CTA. The tone should be direct, warm but not soft, and reflect our belief that most people are over-medicalized and under-educated about their bodies. Highlight that this is about sustainable lifestyle changes, not quick fixes. Make it feel like advice from a knowledgeable friend who cares about results.",
+      "templateVars": [
+        "{{first_name}}",
+        "{{unsubscribe_url}}"
+      ]
+    }
+  }
+]

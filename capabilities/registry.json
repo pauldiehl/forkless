@@ -2,43 +2,48 @@
   {
     "id": "execute-command",
     "name": "ExecuteCommand",
-    "description": "Terminal-style UX component for running scripts with arguments and tailing log output",
-    "useCase": "Test and run any registered script/capability with configurable args, live log output, process control",
-    "type": "component",
-    "inline": false,
-    "path": "capabilities/execute-command.html",
-    "usage": {
-      "note": "This is a UI component, not a script. Load it in the Transaction Layer and pass a config with command + args."
-    }
+    "type": "viewer",
+    "description": "Terminal-style UX for running scripts with arguments and streaming log output",
+    "path": "capabilities/execute-command.html"
+  },
+  {
+    "id": "email-viewer",
+    "name": "Email Viewer",
+    "type": "viewer",
+    "description": "Renders email templates with preview/source toggle and metadata display",
+    "path": "capabilities/viewers/email-viewer.html",
+    "accepts": "email-template"
   },
   {
     "id": "hello-world",
     "name": "Hello World",
-    "description": "Greeting script that takes a name and logs hello in 3 languages",
-    "useCase": "Demo/test script for validating the ExecuteCommand component",
-    "type": "script",
-    "inline": false,
-    "path": "capabilities/scripts/hello-world.js",
+    "type": "runner",
+    "description": "Greeting script — takes a name, logs hello in 3 languages",
+    "path": "capabilities/runners/hello-world.js",
+    "viewWith": "execute-command",
     "usage": {
-      "command": "node capabilities/scripts/hello-world.js",
-      "args": [
-        { "name": "--name", "placeholder": "Your name", "required": true }
-      ]
+      "command": "node capabilities/runners/hello-world.js",
+      "args": [{ "name": "--name", "placeholder": "Your name", "required": true }]
     }
   },
   {
     "id": "disk-usage-monitor",
     "name": "Disk Usage Monitor",
-    "description": "Checks disk usage and warns if any mount is over 80%",
-    "useCase": "System health check for disk space monitoring",
-    "type": "script",
-    "inline": false,
-    "path": "capabilities/scripts/disk-usage-monitor.js",
+    "type": "runner",
+    "description": "Checks disk usage, warns if any mount exceeds threshold",
+    "path": "capabilities/runners/disk-usage-monitor.js",
+    "viewWith": "execute-command",
     "usage": {
-      "command": "node capabilities/scripts/disk-usage-monitor.js",
-      "args": [
-        { "name": "--threshold", "placeholder": "Warning threshold % (default: 80)", "required": false }
-      ]
+      "command": "node capabilities/runners/disk-usage-monitor.js",
+      "args": [{ "name": "--threshold", "placeholder": "Warning % (default: 80)", "required": false }]
     }
+  },
+  {
+    "id": "email-template-generator",
+    "name": "Email Template Generator",
+    "type": "generator",
+    "description": "Generates SES-ready HTML email templates from a prompt via LLM",
+    "produces": "email-template",
+    "viewWith": "email-viewer"
   }
 ]

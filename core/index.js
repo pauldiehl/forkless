@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const { spawn } = require('child_process');
 const { chat } = require('../lib/llm');
+const { listCapabilities, getCapability } = require('../lib/capabilities');
+const { listArtifacts, readArtifactContent } = require('../lib/artifacts');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -17,32 +19,33 @@ app.use('/transaction-layer', express.static(path.join(__dirname, 'transaction-l
 app.use('/capabilities', express.static(path.join(ROOT, 'capabilities')));
 
 // ========================================
-// CAPABILITIES REGISTRY
+// CAPABILITIES
 // ========================================
 app.get('/api/capabilities', (req, res) => {
-  try {
-    delete require.cache[require.resolve('../capabilities/registry.json')];
-    const registry = require('../capabilities/registry.json');
-    res.json(registry);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  res.json(listCapabilities());
 });
 
 app.get('/api/capabilities/:id', (req, res) => {
-  try {
-    delete require.cache[require.resolve('../capabilities/registry.json')];
-    const registry = require('../capabilities/registry.json');
-    const cap = registry.find(c => c.id === req.params.id);
-    if (!cap) return res.status(404).json({ error: 'Capability not found' });
-    res.json(cap);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  const cap = getCapability(req.params.id);
+  if (!cap) return res.status(404).json({ error: 'Not found' });
+  res.json(cap);
 });
 
 // ========================================
-// CHAT API
+// ARTIFACTS (for viewers to fetch content)
+// ========================================
+app.get('/api/artifacts', (req, res) => {
+  res.json(listArtifacts(req.query.type));
+});
+
+app.get('/api/artifacts/:id', (req, res) => {
+  const artifact = readArtifactContent(req.params.id);
+  if (!artifact) return res.status(404).json({ error: 'Not found' });
+  res.json(artifact);
+});
+
+// ========================================
+// CHAT
 // ========================================
 app.post('/api/chat', async (req, res) => {
   try {
@@ -68,7 +71,7 @@ app.post('/api/chat', async (req, res) => {
 });
 
 // ========================================
-// EXEC API (streaming process output)
+// EXEC (streaming process output)
 // ========================================
 let activeProcess = null;
 
@@ -76,34 +79,25 @@ app.post('/api/exec', (req, res) => {
   const { command } = req.body;
   if (!command) return res.status(400).json({ error: 'command required' });
 
-  // Parse command into parts
   const parts = command.match(/(?:[^\s"]+|"[^"]*")+/g) || [];
   const cmd = parts[0];
   const args = parts.slice(1).map(a => a.replace(/^"|"$/g, ''));
 
-  // Stream response
   res.setHeader('Content-Type', 'application/x-ndjson');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Transfer-Encoding', 'chunked');
 
-  const proc = spawn(cmd, args, {
-    cwd: ROOT,
-    shell: true,
-    env: { ...process.env }
-  });
-
+  const proc = spawn(cmd, args, { cwd: ROOT, shell: true, env: { ...process.env } });
   activeProcess = proc;
 
   proc.stdout.on('data', (data) => {
-    const lines = data.toString().split('\n').filter(Boolean);
-    for (const line of lines) {
+    for (const line of data.toString().split('\n').filter(Boolean)) {
       res.write(JSON.stringify({ type: 'stdout', data: line }) + '\n');
     }
   });
 
   proc.stderr.on('data', (data) => {
-    const lines = data.toString().split('\n').filter(Boolean);
-    for (const line of lines) {
+    for (const line of data.toString().split('\n').filter(Boolean)) {
       res.write(JSON.stringify({ type: 'stderr', data: line }) + '\n');
     }
   });
@@ -115,7 +109,7 @@ app.post('/api/exec', (req, res) => {
   });
 
   proc.on('error', (err) => {
-    res.write(JSON.stringify({ type: 'stderr', data: `Error: ${err.message}` }) + '\n');
+    res.write(JSON.stringify({ type: 'stderr', data: err.message }) + '\n');
     res.write(JSON.stringify({ type: 'exit', code: 1 }) + '\n');
     res.end();
     activeProcess = null;
@@ -128,7 +122,7 @@ app.post('/api/exec/kill', (req, res) => {
     activeProcess = null;
     res.json({ killed: true });
   } else {
-    res.json({ killed: false, reason: 'No active process' });
+    res.json({ killed: false });
   }
 });
 
