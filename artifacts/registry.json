@@ -41,5 +41,14 @@
     "metadata": {
       "title": "Forkless Platform Architecture & Operation Guide"
     }
+  },
+  {
+    "id": "forkless-simple-guide",
+    "type": "markdown",
+    "path": "artifacts/docs/forkless-simple-guide.md",
+    "created": "2026-03-13T02:13:22.308Z",
+    "metadata": {
+      "title": "Forkless Platform - Simple Guide"
+    }
   }
 ]
