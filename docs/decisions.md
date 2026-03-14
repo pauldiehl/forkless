@@ -29,3 +29,9 @@ Format:
 **Context:** DynamoDB is the natural fit for profigs (JSON documents, flexible schema).
 **Decision:** Start with SQLite or flat JSON files. Move to DynamoDB when we hit limits.
 **Rationale:** SQLite runs on the monolith with zero config. JSON files are even simpler for profigs (one file per user). No AWS service to provision, no network latency. Phase 1 won't have enough users to need DynamoDB.
+
+## 2026-03-14 — Adopt four operational patterns from Paperclip analysis
+
+**Context:** Analyzed Paperclip (paperclip.ing) — an open-source agent orchestration framework. Their approach is "business as container" vs our "business as protocol." Only ~20% overlap, but four patterns are genuinely excellent and implementation-ready.
+**Decision:** Adopt the Heartbeat Pattern, Atomic Budget Enforcement, Task-to-Goal Traceability, and Multi-Company Data Isolation. Do NOT adopt Paperclip as a dependency or framework.
+**Rationale:** These are infrastructure patterns, not product opinions. They solve real problems we'll hit: background intelligence (heartbeat), cost control at scale (budget), audit trails (traceability), and multi-brand isolation (companies). Stealing patterns is cheaper than building from scratch and avoids framework lock-in. Implementation priority: Budget → Multi-Company → Heartbeat → Traceability. See docs/OPERATIONAL-PATTERNS.md for full design.
